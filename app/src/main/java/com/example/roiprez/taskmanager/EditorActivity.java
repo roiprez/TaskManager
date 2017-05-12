@@ -11,10 +11,6 @@ import android.widget.Toast;
 import static com.example.roiprez.taskmanager.MainActivity.mFirebaseDatabaseReference;
 import static com.example.roiprez.taskmanager.MainActivity.mUserUid;
 
-/**
- * Created by Roiprez on 15/04/2017.
- */
-
 public class EditorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +23,18 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String taskText = String.valueOf(taskEditText.getText());
-                Task newTask = new Task(mUserUid, taskText);
-                mFirebaseDatabaseReference.child(mUserUid)
-                        .push().setValue(newTask);
-                Toast savedTask = Toast.makeText(getApplication().getApplicationContext(), "The task have been succesfully saved", Toast.LENGTH_SHORT);
-                savedTask.show();
-                finish();
+                if(taskText.trim().length() <= 0){
+                    Toast notSavedTask = Toast.makeText(getApplication().getApplicationContext(), "The task is empty", Toast.LENGTH_SHORT);
+                    notSavedTask.show();
+                }
+                else {
+                    Task newTask = new Task(mUserUid, taskText);
+                    mFirebaseDatabaseReference.child(mUserUid)
+                            .push().setValue(newTask);
+                    Toast savedTask = Toast.makeText(getApplication().getApplicationContext(), "The task have been succesfully saved", Toast.LENGTH_SHORT);
+                    savedTask.show();
+                    finish();
+                }
             }
         });
     }
