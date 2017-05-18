@@ -160,9 +160,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, final int position, View v) {
-
                         //Pone el botón de borrado como visible y permite pulsarlo para borrar la tarea en cuestión
                         final ImageButton deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
+                        //Ponemos en invisible el icono de borrar si se vuelve a pulsar la tarea
+                        if(deleteButton.getVisibility() == ImageButton.VISIBLE) {
+                            deleteButton.setVisibility(ImageButton.INVISIBLE);
+                            deleteButton.setClickable(false);
+                        }
+                        //Ponemos el botón como visible y permitimos pulsarlo
+                        deleteButton.setClickable(true);
                         deleteButton.setVisibility(ImageButton.VISIBLE);
 
                         deleteButton.setOnClickListener(new View.OnClickListener() {
