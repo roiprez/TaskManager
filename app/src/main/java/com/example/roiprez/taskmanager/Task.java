@@ -22,6 +22,8 @@ public class Task {
         this.authorUid = authorUid;
     }
 
+    public Task(){}
+
     public String getAuthorUid(){
         return authorUid;
     }

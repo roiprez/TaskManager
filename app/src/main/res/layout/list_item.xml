@@ -17,8 +17,9 @@
         android:text="Necesitas hacer la colada imbécil" />
 
     <ImageButton
-        android:id="@+id/expandButton"
-        android:src="@drawable/ic_expand_more"
+        android:id="@+id/deleteButton"
+        android:visibility="invisible"
+        android:src="@drawable/ic_delete_forever"
         android:background="?android:selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="60dp"

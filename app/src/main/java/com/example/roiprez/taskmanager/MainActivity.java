@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,8 +28,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
 
@@ -40,12 +44,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     //Si no es p`´ublico va a crashear la aplicación
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView taskDescription;
-        ImageButton expandButton;
+        ImageButton deleteButton;
 
         public MessageViewHolder(View v) {
             super(v);
             taskDescription = (TextView) itemView.findViewById(R.id.taskText);
-            expandButton = (ImageButton) itemView.findViewById(R.id.expandButton);
+            deleteButton = (ImageButton) itemView.findViewById(R.id.deleteButton);
         }
     }
 
@@ -116,8 +120,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                 if (task.getTaskText() != null) {
                     viewHolder.taskDescription.setText(task.getTaskText());
-                    viewHolder.expandButton.setVisibility(TextView.VISIBLE);
-                    viewHolder.expandButton.setVisibility(ImageView.VISIBLE);
                 }
             }
         };
@@ -152,6 +154,42 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 startActivity(addTaskIntent);
             }
         });
+
+        //Es el clickListener de la lista de tareas
+        ItemClickSupport.addTo(taskList)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, final int position, View v) {
+
+                        //Pone el botón de borrado como visible y permite pulsarlo para borrar la tarea en cuestión
+                        final ImageButton deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
+                        deleteButton.setVisibility(ImageButton.VISIBLE);
+
+                        deleteButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String taskId = mFirebaseAdapter.getItem(position).getId();
+                                Log.e("Se ha pulsado la task", mFirebaseAdapter.getItem(position).getTaskText());
+                                mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                                            snapshot.getRef().removeValue();
+                                            mFirebaseAdapter.notifyDataSetChanged();
+                                            deleteButton.setVisibility(ImageButton.INVISIBLE);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Log.e("OnCancelled", "onCancelled", databaseError.toException());
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
     }
 
     @Override
