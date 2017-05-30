@@ -1,27 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:background="@android:color/white"
-    android:layout_marginBottom="1dp">
+    android:layout_height="60dp">
 
-    <TextView
-        android:id="@+id/taskText"
-        android:textColor="@color/textGray"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/optionsLinearLayout"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_weight="10"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:text="Necesitas hacer la colada imbécil" />
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
-    <ImageButton
-        android:id="@+id/deleteButton"
-        android:visibility="invisible"
-        android:src="@drawable/ic_delete_forever"
-        android:background="?android:selectableItemBackground"
-        android:layout_width="0dp"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="2"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="BACK" />
+
+        <TextView
+            android:id="@+id/editButton"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="8"
+            android:background="@color/colorAccentLight"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="EDIT" />
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_weight="2"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/ic_delete_forever" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/taskLinearLayout"
+        android:visibility="visible"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_weight="2" />
-</LinearLayout>
+        android:layout_marginBottom="1dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/taskText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:text="Necesitas hacer la colada imbécil"
+            android:textColor="@color/textGray" />
+    </LinearLayout>
+</RelativeLayout>

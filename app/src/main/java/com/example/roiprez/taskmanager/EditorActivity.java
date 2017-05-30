@@ -1,5 +1,6 @@
 package com.example.roiprez.taskmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,15 +20,21 @@ public class EditorActivity extends AppCompatActivity {
         Button saveButton = (Button) findViewById(R.id.saveButton);
         final EditText taskEditText = (EditText) findViewById(R.id.editTextViewTask);
 
+        final Intent myIntent = getIntent(); // gets the previously created intent
+        String taskTextFromEdition = myIntent.getStringExtra("Text");
+
+        if (taskTextFromEdition != null) {
+            taskEditText.getText().append(taskTextFromEdition);
+        }
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String taskText = String.valueOf(taskEditText.getText());
-                if(taskText.trim().length() <= 0){
+                if (taskText.trim().length() <= 0) {
                     Toast notSavedTask = Toast.makeText(getApplication().getApplicationContext(), "The task is empty", Toast.LENGTH_SHORT);
                     notSavedTask.show();
-                }
-                else {
+                } else {
                     Task newTask = new Task(mUserUid, taskText);
                     mFirebaseDatabaseReference.child(mUserUid)
                             .push().setValue(newTask);
