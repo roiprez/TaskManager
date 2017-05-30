@@ -12,14 +12,14 @@
         android:orientation="horizontal"
         android:visibility="invisible">
 
-        <TextView
+        <ImageView
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="2"
             android:background="@color/colorAccent"
             android:gravity="center"
             android:padding="16dp"
-            android:text="BACK" />
+            android:src="@drawable/ic_arrow_back" />
 
         <TextView
             android:id="@+id/editButton"
@@ -35,8 +35,6 @@
             android:id="@+id/deleteButton"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_weight="2"
             android:background="?android:selectableItemBackground"
             android:src="@drawable/ic_delete_forever" />
@@ -57,7 +55,7 @@
             android:layout_height="60dp"
             android:gravity="center_vertical"
             android:padding="16dp"
-            android:text="Necesitas hacer la colada imbécil"
+            android:text="Ejemplo de tarea"
             android:textColor="@color/textGray" />
     </LinearLayout>
 </RelativeLayout>

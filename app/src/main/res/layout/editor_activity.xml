@@ -8,16 +8,18 @@
         android:id="@+id/editTextViewTask"
         android:layout_width="0dp"
         android:layout_weight="8"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="text" />
 
-    <Button
+    <ImageButton
         android:id="@+id/saveButton"
         android:layout_width="0dp"
         android:layout_weight="2"
         android:layout_height="42dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:background="@color/lightGray"
-        android:text="SAVE"
-        android:textColor="@color/textGray"/>
+        android:src="@drawable/ic_save"
+        android:textColor="@color/textGray"
+        android:layout_marginLeft="8dp" />
 
 </LinearLayout>

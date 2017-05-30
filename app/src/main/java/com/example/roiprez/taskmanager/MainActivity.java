@@ -211,18 +211,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         editButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                String taskId = mFirebaseAdapter.getItem(position).getId();
+                                final String taskId = mFirebaseAdapter.getItem(position).getId();
                                 Log.e("Se ha pulsado la task", mFirebaseAdapter.getItem(position).getTaskText());
                                 mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                            Intent addTaskIntent = new Intent(MainActivity.this, EditorActivity.class);
+                                            Intent editTaskIntent = new Intent(MainActivity.this, EditorActivity.class);
                                             String taskText = mFirebaseAdapter.getItem(position).getTaskText();
-                                            addTaskIntent.putExtra("Text", taskText);
-                                            startActivity(addTaskIntent);
+                                            editTaskIntent.putExtra("Text", taskText);
+                                            editTaskIntent.putExtra("id", taskId);
+                                            startActivity( editTaskIntent);
 
-                                            snapshot.getRef().removeValue();
                                             mFirebaseAdapter.notifyDataSetChanged();
                                             optionsLinearLayout.setVisibility(LinearLayout.INVISIBLE);
                                             taskLinearLayout.setVisibility(LinearLayout.VISIBLE);
