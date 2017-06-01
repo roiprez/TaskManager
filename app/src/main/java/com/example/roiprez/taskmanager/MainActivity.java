@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,35 +41,34 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    //Si no es p`´ublico va a crashear la aplicación
+    //Si no es público va a crashear la aplicación
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView taskDescription;
+        TextView taskDate;
         ImageButton deleteButton;
 
         public MessageViewHolder(View v) {
             super(v);
             taskDescription = (TextView) itemView.findViewById(R.id.taskText);
+            taskDate = (TextView) itemView.findViewById(R.id.taskDate);
             deleteButton = (ImageButton) itemView.findViewById(R.id.deleteButton);
         }
     }
 
-    public static final String MESSAGES_CHILD = "messages";
 
     private ProgressBar mProgressBar;
-    private ImageButton addTaskButton;
     private RecyclerView taskList;
     private LinearLayoutManager mLinearLayoutManager;
 
     private GoogleApiClient mGoogleApiClient;
     private FirebaseRecyclerAdapter<Task, MessageViewHolder> mFirebaseAdapter;
-    public static DatabaseReference mFirebaseDatabaseReference = null; //Reference to the database
+    public static DatabaseReference mFirebaseDatabaseReference = null;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
-    protected static String mUsername;   //Name of the current user
+    protected static String mUsername;
     protected static String mUserUid;
-    private String mPhotoUrl;   //Photo of the current user
+    private String mPhotoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
         if (mFirebaseUser == null) {
             // Not signed in, launch the Sign In activity
@@ -120,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                 if (task.getTaskText() != null) {
                     viewHolder.taskDescription.setText(task.getTaskText());
+                    viewHolder.taskDate.setText(task.getTaskDate());
                 }
             }
         };
@@ -145,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         taskList.setAdapter(mFirebaseAdapter);
 
 
-        addTaskButton = (ImageButton) findViewById(R.id.addTaskButton);
+        ImageButton addTaskButton = (ImageButton) findViewById(R.id.addTaskButton);
 
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,17 +215,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                                 mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                            Intent editTaskIntent = new Intent(MainActivity.this, EditorActivity.class);
-                                            String taskText = mFirebaseAdapter.getItem(position).getTaskText();
-                                            editTaskIntent.putExtra("Text", taskText);
-                                            editTaskIntent.putExtra("id", taskId);
-                                            startActivity( editTaskIntent);
+                                        Intent editTaskIntent = new Intent(MainActivity.this, EditorActivity.class);
+                                        String taskText = mFirebaseAdapter.getItem(position).getTaskText();
+                                        editTaskIntent.putExtra("Text", taskText);
+                                        editTaskIntent.putExtra("id", taskId);
+                                        startActivity(editTaskIntent);
 
-                                            mFirebaseAdapter.notifyDataSetChanged();
-                                            optionsLinearLayout.setVisibility(LinearLayout.INVISIBLE);
-                                            taskLinearLayout.setVisibility(LinearLayout.VISIBLE);
-                                        }
+                                        mFirebaseAdapter.notifyDataSetChanged();
+                                        optionsLinearLayout.setVisibility(LinearLayout.INVISIBLE);
+                                        taskLinearLayout.setVisibility(LinearLayout.VISIBLE);
+
                                     }
 
                                     @Override

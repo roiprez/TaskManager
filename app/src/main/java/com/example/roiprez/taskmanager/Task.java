@@ -1,5 +1,7 @@
 package com.example.roiprez.taskmanager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -11,20 +13,24 @@ public class Task {
     private String authorUid;
     private String id;
     private String taskText;
-    private Date taskDate;
+    private String taskDate;
     private int taskPriority;
-    private String [] taskTags;
+    private String[] taskTags;
 
-    public Task(String authorUid, String taskText){
+    public Task(String authorUid, String taskText) {
         UUID uuid = UUID.randomUUID();
         this.id = uuid.toString();
         this.taskText = taskText;
         this.authorUid = authorUid;
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        taskDate = dateFormat.format(date); //2016/11/16 12:08:43
     }
 
-    public Task(){}
+    public Task() {
+    }
 
-    public String getAuthorUid(){
+    public String getAuthorUid() {
         return authorUid;
     }
 
@@ -32,23 +38,21 @@ public class Task {
         return taskText;
     }
 
-    public void setTaskText(String taskText) {
-        this.taskText = taskText;
-    }
+    //public void setTaskText(String taskText) {this.taskText = taskText;}
 
-    public Date getTaskDate(){
+    public String getTaskDate() {
         return taskDate;
     }
 
-    public void setTaskDate(Date taskDate) {
+    public void setTaskDate(String taskDate) {
         this.taskDate = taskDate;
     }
 
-    public void setId(String string){
+    public void setId(String string) {
         this.id = string;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 }
