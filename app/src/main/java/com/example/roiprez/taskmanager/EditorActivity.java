@@ -35,48 +35,49 @@ public class EditorActivity extends AppCompatActivity {
             taskEditText.getText().append(taskTextFromEdition);
         }
 
+        //Listener que se produce al clicar en el botón de guardado
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String taskText = String.valueOf(taskEditText.getText());
-                if (taskText.trim().length() <= 0) {
+                String taskText = String.valueOf(taskEditText.getText()).trim();
+                if (taskText.length() <= 0) {
                     Toast notSavedTask = Toast.makeText(getApplication().getApplicationContext(), "The task is empty", Toast.LENGTH_SHORT);
                     notSavedTask.show();
                 } else {
+                    //Si se trata de una edición
                     if (taskTextFromEdition != null) {
-                        mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(idFromEdition).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    snapshot.getRef().removeValue();
-
-                                    Task newTask = new Task(mUserUid, taskText);
-                                    mFirebaseDatabaseReference.child(mUserUid)
-                                            .push().setValue(newTask);
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                Log.e("OnCancelled", "onCancelled", databaseError.toException());
-                            }
-                        });
+                        editingTask(idFromEdition, taskText);
                     }
-                    else{
+                    //Si la tarea es de nueva creación
+                    else {
                         Task newTask = new Task(mUserUid, taskText);
-                        mFirebaseDatabaseReference.child(mUserUid)
-                                .push().setValue(newTask);
+                        mFirebaseDatabaseReference.child(mUserUid).push().setValue(newTask);
                     }
 
                     Toast savedTask = Toast.makeText(getApplication().getApplicationContext(), "The task have been succesfully saved", Toast.LENGTH_SHORT);
                     savedTask.show();
-
-                    //Intent resultIntent = new Intent(EditorActivity.this, MainActivity.class);
-                    //resultIntent.putExtra("FinishedEdit", true);
-                    //startActivity(resultIntent);
-
                     finish();
                 }
+            }
+        });
+    }
+
+
+    public void editingTask(String idFromEdition, final String taskText) {
+        mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(idFromEdition).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    //Quitamos el valor de la base de datos y lo reescribimos
+                    snapshot.getRef().removeValue();
+                    Task newTask = new Task(mUserUid, taskText);
+                    mFirebaseDatabaseReference.child(mUserUid).push().setValue(newTask);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("OnCancelled", "onCancelled", databaseError.toException());
             }
         });
     }
