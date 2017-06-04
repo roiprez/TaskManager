@@ -25,7 +25,8 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editor_activity);
         ImageButton saveButton = (ImageButton) findViewById(R.id.saveButton);
-        final EditText taskEditText = (EditText) findViewById(R.id.editTextViewTask);
+        ImageButton deleteButton = (ImageButton) findViewById(R.id.deleteButton);
+        final EditText taskEditText = (EditText) findViewById(R.id.editTextTask);
 
         final Intent myIntent = getIntent(); // gets the previously created intent
         final String taskTextFromEdition = myIntent.getStringExtra("Text");
@@ -58,6 +59,28 @@ public class EditorActivity extends AppCompatActivity {
                     savedTask.show();
                     finish();
                 }
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(idFromEdition).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            snapshot.getRef().removeValue();
+                            Toast savedTask = Toast.makeText(getApplication().getApplicationContext(), "The task have been succesfully removed", Toast.LENGTH_SHORT);
+                            savedTask.show();
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("OnCancelled", "onCancelled", databaseError.toException());
+                    }
+                });
             }
         });
     }

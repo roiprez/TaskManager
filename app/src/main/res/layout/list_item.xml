@@ -1,72 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="75dp">
-
-    <LinearLayout
-        android:id="@+id/optionsLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginBottom="1dp"
-        android:background="@android:color/white"
-        android:orientation="horizontal"
-        android:visibility="invisible">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="75dp"
-            android:layout_weight="2"
-            android:background="@color/colorAccent"
-            android:gravity="center"
-            android:padding="16dp"
-            android:src="@drawable/ic_arrow_back" />
-
-        <TextView
-            android:id="@+id/editButton"
-            android:layout_width="0dp"
-            android:layout_height="75dp"
-            android:layout_weight="8"
-            android:background="@color/colorAccentLight"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="EDIT" />
-
-        <ImageButton
-            android:id="@+id/deleteButton"
-            android:layout_width="0dp"
-            android:layout_height="75dp"
-            android:layout_weight="2"
-            android:background="?android:selectableItemBackground"
-            android:src="@drawable/ic_delete_forever" />
-    </LinearLayout>
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/taskLinearLayout"
-        android:visibility="visible"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
         android:background="@android:color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/taskText"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:textSize="24sp"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
+            android:layout_height="wrap_content"
             android:gravity="bottom"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
             android:text="Ejemplo de tarea"
-            android:textColor="@color/textGray" />
+            android:textColor="@color/textGray"
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/taskDate"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:gravity="top"
-            android:textSize="14sp"
+            android:paddingEnd="16dp"
             android:paddingLeft="18dp"
+            android:paddingRight="16dp"
+            android:paddingStart="18dp"
             android:text="23/04/2016"
-            android:textColor="@color/colorAccentDark" />
+            android:textColor="@color/colorAccentDark"
+            android:textSize="12sp" />
+
     </LinearLayout>
 </RelativeLayout>

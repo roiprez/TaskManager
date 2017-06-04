@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/editTextViewTask"
-        android:layout_width="0dp"
-        android:layout_weight="8"
-        android:layout_height="wrap_content"
-        android:inputType="text" />
+        <EditText
+            android:id="@+id/editTextTask"
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:padding="8dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textGray"
+            android:textSize="20sp"
+            android:background="@drawable/bg" />
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="42dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/lightGray"
+            android:src="@drawable/ic_save"
+            android:textColor="@color/textGray"
+            android:layout_marginLeft="8dp" />
+    </LinearLayout>
 
     <ImageButton
-        android:id="@+id/saveButton"
-        android:layout_width="0dp"
-        android:layout_weight="2"
-        android:layout_height="42dp"
-        android:layout_marginStart="8dp"
-        android:background="@color/lightGray"
-        android:src="@drawable/ic_save"
-        android:textColor="@color/textGray"
-        android:layout_marginLeft="8dp" />
-
-</LinearLayout>
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/rectangle"
+        android:src="@drawable/ic_delete_forever"
+        android:textColor="@color/textGray" />
+</RelativeLayout>

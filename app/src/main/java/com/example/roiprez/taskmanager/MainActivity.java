@@ -10,6 +10,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -18,8 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
@@ -160,83 +163,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, final int position, View v) {
 
-                        final LinearLayout optionsLinearLayout = (LinearLayout) v.findViewById(R.id.optionsLinearLayout);
-                        final LinearLayout taskLinearLayout = (LinearLayout) v.findViewById(R.id.taskLinearLayout);
-
-                        //Pone el botón de borrado como visible y permite pulsarlo para borrar la tarea en cuestión
-                        final ImageButton deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
-                        final TextView editButton = (TextView) v.findViewById(R.id.editButton);
-
-                        //Ponemos en invisible el icono de borrar si se vuelve a pulsar la tarea
-                        if (optionsLinearLayout.getVisibility() == LinearLayout.VISIBLE) {
-                            optionsLinearLayout.setVisibility(LinearLayout.INVISIBLE);
-                            taskLinearLayout.setVisibility(LinearLayout.VISIBLE);
-                            deleteButton.setClickable(false);
-                            editButton.setClickable(false);
-                        }
-
-                        //Ponemos el botón como visible y permitimos pulsarlo
-                        else {
-                            deleteButton.setClickable(true);
-                            editButton.setClickable(true);
-                            optionsLinearLayout.setVisibility(LinearLayout.VISIBLE);
-                            taskLinearLayout.setVisibility(LinearLayout.INVISIBLE);
-                        }
-
-                        deleteButton.setOnClickListener(new View.OnClickListener() {
+                        final String taskId = mFirebaseAdapter.getItem(position).getId();
+                        Log.e("Se ha pulsado la task", mFirebaseAdapter.getItem(position).getTaskText());
+                        mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onClick(View view) {
-                                String taskId = mFirebaseAdapter.getItem(position).getId();
-                                Log.e("Se ha pulsado la task", mFirebaseAdapter.getItem(position).getTaskText());
-                                mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                            snapshot.getRef().removeValue();
-                                            mFirebaseAdapter.notifyDataSetChanged();
-                                            optionsLinearLayout.setVisibility(LinearLayout.INVISIBLE);
-                                            taskLinearLayout.setVisibility(LinearLayout.VISIBLE);
-                                        }
-                                    }
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Intent editTaskIntent = new Intent(MainActivity.this, EditorActivity.class);
+                                String taskText = mFirebaseAdapter.getItem(position).getTaskText();
+                                editTaskIntent.putExtra("Text", taskText);
+                                editTaskIntent.putExtra("id", taskId);
+                                startActivity(editTaskIntent);
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        Log.e("OnCancelled", "onCancelled", databaseError.toException());
-                                    }
-                                });
+                                mFirebaseAdapter.notifyDataSetChanged();
                             }
-                        });
 
-                        editButton.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View view) {
-                                final String taskId = mFirebaseAdapter.getItem(position).getId();
-                                Log.e("Se ha pulsado la task", mFirebaseAdapter.getItem(position).getTaskText());
-                                mFirebaseDatabaseReference.child(mUserUid).orderByChild("id").equalTo(taskId).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        Intent editTaskIntent = new Intent(MainActivity.this, EditorActivity.class);
-                                        String taskText = mFirebaseAdapter.getItem(position).getTaskText();
-                                        editTaskIntent.putExtra("Text", taskText);
-                                        editTaskIntent.putExtra("id", taskId);
-                                        startActivity(editTaskIntent);
-
-                                        mFirebaseAdapter.notifyDataSetChanged();
-                                        optionsLinearLayout.setVisibility(LinearLayout.INVISIBLE);
-                                        taskLinearLayout.setVisibility(LinearLayout.VISIBLE);
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        Log.e("OnCancelled", "onCancelled", databaseError.toException());
-                                    }
-                                });
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.e("OnCancelled", "onCancelled", databaseError.toException());
                             }
                         });
                     }
                 });
-
     }
 
     @Override
